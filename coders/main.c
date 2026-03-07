@@ -6,11 +6,17 @@
 /*   By: kraghib <kraghib@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/06 21:24:26 by kraghib           #+#    #+#             */
-/*   Updated: 2026/03/06 23:10:07 by kraghib          ###   ########.fr       */
+/*   Updated: 2026/03/07 23:22:33 by kraghib          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
+
+int	error(char *str)
+{
+	fprintf(stderr, BRED "codexion: %s\n" RST, str);
+	return (1);
+}
 
 int	parse(int ac, char **av)
 {
@@ -19,33 +25,82 @@ int	parse(int ac, char **av)
 	long	val;
 
 	if (ac != 9 || (ft_cmp(av[8], "fifo") != 0 && ft_cmp(av[8], "edf") != 0))
-		return (1);
+		return (error("scheduler must be fifo or edf"));
 	i = 0;
 	while (++i < 8)
 	{
 		if (ft_strlen(av[i]) > 11)
-			return (1);
+			return (error("input number out of range"));
 		j = -1;
 		while (av[i][++j])
 			if ((j == 0 && !(av[i][j] == '+' || (av[i][j] >= '0'
-					&& av[i][j] <= '9'))) || (av[i][j] == '+'
+							&& av[i][j] <= '9'))) || (av[i][j] == '+'
 					&& !av[i][j + 1]) || (j != 0 && (av[i][j] < '0'
 						|| av[i][j] > '9')))
-				return (1);
+				return (error("invalid input number"));
 		val = ft_atoi(av[i]);
 		if ((val < 0 || val > 2147483647))
-			return (1);
+			return (error("input number out of range"));
 	}
 	return (0);
 }
 
+int	fill_data(char **av, t_data *data)
+{
+	data->nb_coders = ft_atoi(av[0]);
+	data->t_burnout = ft_atoi(av[1]);
+	data->t_compile = ft_atoi(av[2]);
+	data->t_debug = ft_atoi(av[3]);
+	data->t_refactor = ft_atoi(av[4]);
+	data->nb_compiles_req = ft_atoi(av[5]);
+	data->cooldown = ft_atoi(av[6]);
+	data->is_edf = 0;
+	if (ft_cmp(av[7], "fifo"))
+		data->is_edf = 1;
+	data->start_time = 0;
+	data->sim_stop = 0;
+	if (data->nb_coders < 1 || data->nb_coders > 250)
+		return (error("invalid number_of_coders"));
+	if (data->t_burnout <= 60 || data->t_compile <= 60 || data->t_debug <= 60
+		|| data->t_refactor <= 60)
+		return (error("time values must be > 60"));
+	return (0);
+}
+
+void	print_data(t_data *data)
+{
+	printf(BGREEN "nb_coders: %d\n", data->nb_coders);
+	printf("t_burnout: %ld\n", data->t_burnout);
+	printf("t_compile: %ld\n", data->t_compile);
+	printf("t_debug: %ld\n", data->t_debug);
+	printf("t_refactor: %ld\n", data->t_refactor);
+	printf("nb_compiles_req: %d\n", data->nb_compiles_req);
+	printf("cooldown: %ld\n", data->cooldown);
+	printf("scheduler (is_edf): %d\n", data->is_edf);
+	printf("start_time: %ld\n", data->start_time);
+	printf("sim_stop: %d\n" RST, data->sim_stop);
+}
+
 int	main(int ac, char **av)
 {
+	t_data	data;
+	int		i;
+
 	if (parse(ac, av))
-	{
-		write(1, "codexion: invalid arguments\n", 29);
 		return (1);
+	if (fill_data(av + 1, &data))
+		return (1);
+	print_data(&data);
+	init(&data);
+	data.start_time = get_time_ms();
+	i = -1;
+	while (++i < data.nb_coders)
+	{
+		data.coders[i].last_compile_start = data.start_time;
+		pthread_create(&data.coders[i].thread, NULL, routine, &data.coders[i]);
 	}
-	printf("ok");
+	i = -1;
+	while (++i < data.nb_coders)
+		pthread_join(data.coders[i].thread, NULL);
 	return (0);
 }

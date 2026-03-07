@@ -6,7 +6,7 @@
 /*   By: kraghib <kraghib@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/06 21:38:07 by kraghib           #+#    #+#             */
-/*   Updated: 2026/03/06 21:52:58 by kraghib          ###   ########.fr       */
+/*   Updated: 2026/03/07 22:54:18 by kraghib          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,13 @@ int	ft_strlen(char *str)
 	while (str[i])
 		i++;
 	return (i);
+}
+
+long	get_time_ms(void)
+{
+	struct timeval	time;
+
+	if (gettimeofday(&time, NULL) == -1)
+		return (-1);
+	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 }
