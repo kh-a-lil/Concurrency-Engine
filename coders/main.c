@@ -6,7 +6,7 @@
 /*   By: kraghib <kraghib@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/06 21:24:26 by kraghib           #+#    #+#             */
-/*   Updated: 2026/03/07 23:22:33 by kraghib          ###   ########.fr       */
+/*   Updated: 2026/03/11 20:55:02 by kraghib          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,20 +67,6 @@ int	fill_data(char **av, t_data *data)
 	return (0);
 }
 
-void	print_data(t_data *data)
-{
-	printf(BGREEN "nb_coders: %d\n", data->nb_coders);
-	printf("t_burnout: %ld\n", data->t_burnout);
-	printf("t_compile: %ld\n", data->t_compile);
-	printf("t_debug: %ld\n", data->t_debug);
-	printf("t_refactor: %ld\n", data->t_refactor);
-	printf("nb_compiles_req: %d\n", data->nb_compiles_req);
-	printf("cooldown: %ld\n", data->cooldown);
-	printf("scheduler (is_edf): %d\n", data->is_edf);
-	printf("start_time: %ld\n", data->start_time);
-	printf("sim_stop: %d\n" RST, data->sim_stop);
-}
-
 int	main(int ac, char **av)
 {
 	t_data	data;
@@ -90,7 +76,6 @@ int	main(int ac, char **av)
 		return (1);
 	if (fill_data(av + 1, &data))
 		return (1);
-	print_data(&data);
 	init(&data);
 	data.start_time = get_time_ms();
 	i = -1;

@@ -6,7 +6,7 @@
 /*   By: kraghib <kraghib@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/07 21:53:03 by kraghib           #+#    #+#             */
-/*   Updated: 2026/03/07 22:01:49 by kraghib          ###   ########.fr       */
+/*   Updated: 2026/03/11 20:30:18 by kraghib          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,5 @@
 
 void	*routine(void *data)
 {
-	printf("gg\n");
 	return (data);
 }

@@ -6,7 +6,7 @@
 /*   By: kraghib <kraghib@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/06 21:25:37 by kraghib           #+#    #+#             */
-/*   Updated: 2026/03/07 22:56:14 by kraghib          ###   ########.fr       */
+/*   Updated: 2026/03/11 20:26:32 by kraghib          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ typedef struct s_coder	t_coder;
 
 typedef struct s_heap
 {
-	int					coder_ids[250];
-	long				priorities[250];
+	int					coder_ids[2];
+	long				priorities[2];
 	int					size;
 }						t_heap;
 
@@ -89,8 +89,8 @@ struct					s_coder
 	int					compiles_done;
 	long				last_compile_start;
 	t_data				*data;
-	t_dongle			*left_dongle;
-	t_dongle			*right_dongle;
+	t_dongle			*first_dongle;
+	t_dongle			*second_dongle;
 	pthread_t			thread;
 };
 

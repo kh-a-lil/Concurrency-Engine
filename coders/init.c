@@ -6,7 +6,7 @@
 /*   By: kraghib <kraghib@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/07 20:26:33 by kraghib           #+#    #+#             */
-/*   Updated: 2026/03/07 23:18:06 by kraghib          ###   ########.fr       */
+/*   Updated: 2026/03/11 20:26:58 by kraghib          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,17 @@ int	init(t_data *data)
 	while (i < data->nb_coders)
 	{
 		data->coders[i].id = i + 1;
-		data->coders[i].left_dongle = &data->dongles[i];
 		data->coders[i].compiles_done = 0;
-		data->coders[i].right_dongle = &data->dongles[(i + 1)
+		data->coders[i].first_dongle = &data->dongles[i];
+		data->coders[i].second_dongle = &data->dongles[(i + 1)
 			% data->nb_coders];
+		if (i % 2 != 0)
+		{
+			data->coders[i].second_dongle = &data->dongles[i];
+			data->coders[i].first_dongle = &data->dongles[(i + 1)
+				% data->nb_coders];
+		}
+
 		data->coders[i].data = data;
 		i++;
 	}
