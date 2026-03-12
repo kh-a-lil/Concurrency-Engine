@@ -6,7 +6,7 @@
 /*   By: kraghib <kraghib@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/06 21:24:26 by kraghib           #+#    #+#             */
-/*   Updated: 2026/03/11 20:55:02 by kraghib          ###   ########.fr       */
+/*   Updated: 2026/03/12 00:01:59 by kraghib          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ int	main(int ac, char **av)
 	if (fill_data(av + 1, &data))
 		return (1);
 	init(&data);
+	i = -1;
 	data.start_time = get_time_ms();
 	i = -1;
 	while (++i < data.nb_coders)
@@ -84,8 +85,10 @@ int	main(int ac, char **av)
 		data.coders[i].last_compile_start = data.start_time;
 		pthread_create(&data.coders[i].thread, NULL, routine, &data.coders[i]);
 	}
+	monitor(&data);
 	i = -1;
 	while (++i < data.nb_coders)
 		pthread_join(data.coders[i].thread, NULL);
+	clean(&data);
 	return (0);
 }

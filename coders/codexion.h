@@ -6,7 +6,7 @@
 /*   By: kraghib <kraghib@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/06 21:25:37 by kraghib           #+#    #+#             */
-/*   Updated: 2026/03/11 20:26:32 by kraghib          ###   ########.fr       */
+/*   Updated: 2026/03/11 23:37:03 by kraghib          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,15 @@
 
 typedef struct s_coder	t_coder;
 
+typedef struct s_hnode
+{
+	int					id;
+	long				prio;
+}						t_hnode;
+
 typedef struct s_heap
 {
-	int					coder_ids[2];
-	long				priorities[2];
+	t_hnode				heap[2];
 	int					size;
 }						t_heap;
 
@@ -86,8 +91,11 @@ typedef struct s_data
 struct					s_coder
 {
 	int					id;
-	int					compiles_done;
+	long				compiles_done;
 	long				last_compile_start;
+	int					burnout;
+	int					done;
+	pthread_mutex_t		lock;
 	t_data				*data;
 	t_dongle			*first_dongle;
 	t_dongle			*second_dongle;
@@ -100,5 +108,10 @@ int						ft_strlen(char *str);
 int						init(t_data *data);
 void					*routine(void *data);
 long					get_time_ms(void);
+void					monitor(t_data *data);
+long					get_priority(t_coder *c);
+int						check_end(t_data *data);
+void					alt_print(char *msg, t_coder *c);
+void					alt_sleep(long sleep_time_ms, t_data *data);
 
 #endif

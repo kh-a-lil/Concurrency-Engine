@@ -6,7 +6,7 @@
 /*   By: kraghib <kraghib@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/06 21:38:07 by kraghib           #+#    #+#             */
-/*   Updated: 2026/03/07 22:54:18 by kraghib          ###   ########.fr       */
+/*   Updated: 2026/03/11 22:37:06 by kraghib          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,4 +66,35 @@ long	get_time_ms(void)
 	if (gettimeofday(&time, NULL) == -1)
 		return (-1);
 	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
+}
+
+int	check_end(t_data *data)
+{
+	int	stop;
+
+	pthread_mutex_lock(&data->state_lock);
+	stop = data->sim_stop;
+	pthread_mutex_unlock(&data->state_lock);
+	return (stop);
+}
+
+void	alt_print(char *msg, t_coder *c)
+{
+	pthread_mutex_lock(&c->data->print_lock);
+	if (!check_sim_stop(c->data))
+		printf("%ld %d %s\n", get_time_ms() - c->data->start_time, c->id, msg);
+	pthread_mutex_unlock(&c->data->print_lock);
+}
+
+void	alt_sleep(long sleep_time_ms, t_data *data)
+{
+	long	start;
+
+	start = get_time_ms();
+	while (get_time_ms() - start < sleep_time_ms)
+	{
+		if (check_sim_stop(data))
+			break ;
+		usleep(200);
+	}
 }
