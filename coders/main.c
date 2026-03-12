@@ -6,7 +6,7 @@
 /*   By: kraghib <kraghib@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/06 21:24:26 by kraghib           #+#    #+#             */
-/*   Updated: 2026/03/12 00:01:59 by kraghib          ###   ########.fr       */
+/*   Updated: 2026/03/12 23:34:29 by kraghib          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,6 @@ int	main(int ac, char **av)
 	i = -1;
 	while (++i < data.nb_coders)
 		pthread_join(data.coders[i].thread, NULL);
-	clean(&data);
+	//clean(&data);
 	return (0);
 }

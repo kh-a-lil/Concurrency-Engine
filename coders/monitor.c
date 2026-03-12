@@ -6,33 +6,47 @@
 /*   By: kraghib <kraghib@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 01:57:02 by kraghib           #+#    #+#             */
-/*   Updated: 2026/03/11 22:28:09 by kraghib          ###   ########.fr       */
+/*   Updated: 2026/03/12 23:36:44 by kraghib          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
-long	get_priority(t_coder *c)
-{
-	long			priority;
-	struct timeval	tv;
-
-	if (c->data->is_edf)
-	{
-		// EDF: Priority is the exact millisecond they will die
-		pthread_mutex_lock(&c->data->state_lock);
-		priority = c->last_compile_start + c->data->t_burnout;
-		pthread_mutex_unlock(&c->data->state_lock);
-	}
-	else
-	{
-		// FIFO: Priority is the exact microsecond they arrived
-		gettimeofday(&tv, NULL);
-		priority = (tv.tv_sec * 1000000) + tv.tv_usec;
-	}
-	return (priority);
-}
-
 void	monitor(t_data *data)
 {
+	int	i;
+	int	all_finished;
+
+	while (1)
+	{
+		all_finished = 1;
+		i = 0;
+		while (i < data->nb_coders)
+		{
+			pthread_mutex_lock(&data->state_lock);
+			pthread_mutex_lock(&data->coders[i].lock);
+			if (get_time_ms()
+				- data->coders[i].last_compile_start > data->t_burnout)
+			{
+				alt_print("burned out", &data->coders[i]);
+				data->sim_stop = 1;
+				pthread_mutex_unlock(&data->state_lock);
+				pthread_mutex_unlock(&data->coders[i].lock);
+				return ;
+			}
+			if (data->coders[i].done == 0)
+				all_finished = 0;
+			pthread_mutex_unlock(&data->state_lock);
+			pthread_mutex_unlock(&data->coders[i].lock);
+			i++;
+		}
+		if (all_finished)
+		{
+			pthread_mutex_lock(&data->state_lock);
+			data->sim_stop = 1;
+			pthread_mutex_unlock(&data->state_lock);
+			return ;
+		}
+		usleep(1000);
+	}
 }
