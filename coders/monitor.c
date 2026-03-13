@@ -6,7 +6,7 @@
 /*   By: kraghib <kraghib@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 01:57:02 by kraghib           #+#    #+#             */
-/*   Updated: 2026/03/12 23:36:44 by kraghib          ###   ########.fr       */
+/*   Updated: 2026/03/13 01:05:35 by kraghib          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,13 @@ void	monitor(t_data *data)
 			if (get_time_ms()
 				- data->coders[i].last_compile_start > data->t_burnout)
 			{
-				alt_print("burned out", &data->coders[i]);
 				data->sim_stop = 1;
 				pthread_mutex_unlock(&data->state_lock);
 				pthread_mutex_unlock(&data->coders[i].lock);
+				pthread_mutex_lock(&data->print_lock);
+				printf("%ld %d %s\n", get_time_ms() - data->start_time,
+					data->coders[i].id, "burned out");
+				pthread_mutex_unlock(&data->print_lock);
 				return ;
 			}
 			if (data->coders[i].done == 0)

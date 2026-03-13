@@ -6,7 +6,7 @@
 /*   By: kraghib <kraghib@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/07 20:26:33 by kraghib           #+#    #+#             */
-/*   Updated: 2026/03/12 00:02:48 by kraghib          ###   ########.fr       */
+/*   Updated: 2026/03/12 23:52:40 by kraghib          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	init(t_data *data)
 	while (i < data->nb_coders)
 	{
 		data->coders[i].id = i + 1;
-		data->coders[i].data = 0;
+		data->coders[i].done = 0;
 		data->coders[i].burnout = 0;
 		data->coders[i].compiles_done = 0;
 		data->coders[i].first_dongle = &data->dongles[i];

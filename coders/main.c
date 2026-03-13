@@ -6,7 +6,7 @@
 /*   By: kraghib <kraghib@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/06 21:24:26 by kraghib           #+#    #+#             */
-/*   Updated: 2026/03/12 23:34:29 by kraghib          ###   ########.fr       */
+/*   Updated: 2026/03/13 01:20:28 by kraghib          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,28 @@ int	fill_data(char **av, t_data *data)
 	data->sim_stop = 0;
 	if (data->nb_coders < 1 || data->nb_coders > 250)
 		return (error("invalid number_of_coders"));
-	if (data->t_burnout <= 60 || data->t_compile <= 60 || data->t_debug <= 60
-		|| data->t_refactor <= 60)
+	if (data->t_burnout <= 1 || data->t_compile <= 1 || data->t_debug <= 1
+		|| data->t_refactor <= 1)
 		return (error("time values must be > 60"));
 	return (0);
+}
+
+void	clean(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (i < data->nb_coders)
+	{
+		pthread_mutex_destroy(&data->dongles[i].lock);
+		pthread_cond_destroy(&data->dongles[i].cond);
+		pthread_mutex_destroy(&data->coders[i].lock);
+		i++;
+	}
+	pthread_mutex_destroy(&data->print_lock);
+	pthread_mutex_destroy(&data->state_lock);
+	free(data->coders);
+	free(data->dongles);
 }
 
 int	main(int ac, char **av)
@@ -82,13 +100,27 @@ int	main(int ac, char **av)
 	i = -1;
 	while (++i < data.nb_coders)
 	{
-		data.coders[i].last_compile_start = data.start_time;
-		pthread_create(&data.coders[i].thread, NULL, routine, &data.coders[i]);
+		if (i % 2 == 0)
+		{
+			data.coders[i].last_compile_start = data.start_time;
+			pthread_create(&data.coders[i].thread, NULL, routine,
+				&data.coders[i]);
+		}
+	}
+	i = -1;
+	while (++i < data.nb_coders)
+	{
+		if (i % 2 != 0)
+		{
+			data.coders[i].last_compile_start = data.start_time;
+			pthread_create(&data.coders[i].thread, NULL, routine,
+				&data.coders[i]);
+		}
 	}
 	monitor(&data);
 	i = -1;
 	while (++i < data.nb_coders)
 		pthread_join(data.coders[i].thread, NULL);
-	//clean(&data);
+	clean(&data);
 	return (0);
 }

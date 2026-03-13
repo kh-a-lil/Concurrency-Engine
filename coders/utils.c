@@ -6,7 +6,7 @@
 /*   By: kraghib <kraghib@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/06 21:38:07 by kraghib           #+#    #+#             */
-/*   Updated: 2026/03/12 22:45:55 by kraghib          ###   ########.fr       */
+/*   Updated: 2026/03/13 00:03:52 by kraghib          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,14 +106,12 @@ long	get_priority(t_coder *c)
 
 	if (c->data->is_edf)
 	{
-		// EDF: Priority is the exact millisecond they will die
-		pthread_mutex_lock(&c->data->state_lock);
+		pthread_mutex_lock(&c->lock);
 		priority = c->last_compile_start + c->data->t_burnout;
-		pthread_mutex_unlock(&c->data->state_lock);
+		pthread_mutex_unlock(&c->lock);
 	}
 	else
 	{
-		// FIFO: Priority is the exact microsecond they arrived
 		gettimeofday(&tv, NULL);
 		priority = (tv.tv_sec * 1000000) + tv.tv_usec;
 	}
