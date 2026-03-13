@@ -6,7 +6,7 @@
 /*   By: kraghib <kraghib@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/06 21:24:26 by kraghib           #+#    #+#             */
-/*   Updated: 2026/03/13 04:20:47 by kraghib          ###   ########.fr       */
+/*   Updated: 2026/03/13 06:54:23 by kraghib          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,8 +112,20 @@ int	main(int ac, char **av)
 		if (i % 2 == 0)
 		{
 			data.coders[i].last_compile_start = data.start_time;
-			pthread_create(&data.coders[i].thread, NULL, routine,
-				&data.coders[i]);
+			if (pthread_create(&data.coders[i].thread, NULL, routine,
+					&data.coders[i]))
+			{
+				pthread_mutex_lock(&data.state_lock);
+				data.sim_stop = 1;
+				pthread_mutex_unlock(&data.state_lock);
+				while (--i >= 0)
+				{
+					if (i % 2 == 0)
+						pthread_join(data.coders[i].thread, NULL);
+				}
+				clean(&data);
+				return (1);
+			}
 		}
 	}
 	i = -1;
@@ -122,8 +134,20 @@ int	main(int ac, char **av)
 		if (i % 2 != 0)
 		{
 			data.coders[i].last_compile_start = data.start_time;
-			pthread_create(&data.coders[i].thread, NULL, routine,
-				&data.coders[i]);
+			if (pthread_create(&data.coders[i].thread, NULL, routine,
+					&data.coders[i]))
+			{
+				pthread_mutex_lock(&data.state_lock);
+				data.sim_stop = 1;
+				pthread_mutex_unlock(&data.state_lock);
+				while (--i >= 0)
+				{
+					pthread_join(data.coders[i].thread, NULL);
+				}
+				clean(&data);
+				fprintf(,"error creating threads");
+				return (1);
+			}
 		}
 	}
 	monitor(&data);
