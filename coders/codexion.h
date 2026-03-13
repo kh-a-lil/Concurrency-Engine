@@ -6,7 +6,7 @@
 /*   By: kraghib <kraghib@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/06 21:25:37 by kraghib           #+#    #+#             */
-/*   Updated: 2026/03/13 02:59:36 by kraghib          ###   ########.fr       */
+/*   Updated: 2026/03/13 22:01:43 by kraghib          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,5 +92,10 @@ void					req_dongle(t_coder *coder, t_dongle *dongle);
 void					rel_dongle(t_dongle *dongle, long cooldown);
 void					heap_push(t_heap *queue, int id, long prio);
 void					heap_pop(t_heap *queue);
+int						init_odd(t_data *data);
+void					join_even_odd(t_data *data, int i);
+int						init_even(t_data *data, int i);
+void					clean(t_data *data);
+void					join_even_odd(t_data *data, int i);
 
 #endif
