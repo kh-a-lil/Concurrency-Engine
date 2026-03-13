@@ -6,7 +6,7 @@
 /*   By: kraghib <kraghib@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/06 21:24:26 by kraghib           #+#    #+#             */
-/*   Updated: 2026/03/13 06:54:23 by kraghib          ###   ########.fr       */
+/*   Updated: 2026/03/13 21:22:41 by kraghib          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,7 +145,7 @@ int	main(int ac, char **av)
 					pthread_join(data.coders[i].thread, NULL);
 				}
 				clean(&data);
-				fprintf(,"error creating threads");
+				fprintf(stderr, "error creating threads");
 				return (1);
 			}
 		}

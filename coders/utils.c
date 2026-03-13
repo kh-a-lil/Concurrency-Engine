@@ -6,7 +6,7 @@
 /*   By: kraghib <kraghib@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/06 21:38:07 by kraghib           #+#    #+#             */
-/*   Updated: 2026/03/13 06:18:09 by kraghib          ###   ########.fr       */
+/*   Updated: 2026/03/13 21:20:54 by kraghib          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,44 +75,4 @@ int	check_end(t_data *data)
 	stop = data->sim_stop;
 	pthread_mutex_unlock(&data->state_lock);
 	return (stop);
-}
-
-void	alt_print(char *msg, t_coder *c)
-{
-	pthread_mutex_lock(&c->data->print_lock);
-	if (!check_end(c->data))
-		printf("%ld %d %s\n", get_time_ms() - c->data->start_time, c->id, msg);
-	pthread_mutex_unlock(&c->data->print_lock);
-}
-
-void	alt_sleep(long sleep_time_ms, t_data *data)
-{
-	long	start;
-
-	start = get_time_ms();
-	while (get_time_ms() - start < sleep_time_ms)
-	{
-		if (check_end(data))
-			break ;
-		usleep(200);
-	}
-}
-
-long	get_priority(t_coder *c)
-{
-	long			priority;
-	struct timeval	tv;
-
-	if (c->data->is_edf)
-	{
-		pthread_mutex_lock(&c->lock);
-		priority = c->last_compile_start + c->data->t_burnout;
-		pthread_mutex_unlock(&c->lock);
-	}
-	else
-	{
-		gettimeofday(&tv, NULL);
-		priority = (tv.tv_sec * 1000000) + tv.tv_usec;
-	}
-	return (priority);
 }

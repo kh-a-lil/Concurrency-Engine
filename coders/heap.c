@@ -6,11 +6,30 @@
 /*   By: kraghib <kraghib@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 23:10:15 by kraghib           #+#    #+#             */
-/*   Updated: 2026/03/12 23:35:28 by kraghib          ###   ########.fr       */
+/*   Updated: 2026/03/13 21:19:50 by kraghib          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
+
+long	get_priority(t_coder *c)
+{
+	long			priority;
+	struct timeval	tv;
+
+	if (c->data->is_edf)
+	{
+		pthread_mutex_lock(&c->lock);
+		priority = c->last_compile_start + c->data->t_burnout;
+		pthread_mutex_unlock(&c->lock);
+	}
+	else
+	{
+		gettimeofday(&tv, NULL);
+		priority = (tv.tv_sec * 1000000) + tv.tv_usec;
+	}
+	return (priority);
+}
 
 void	swap_nodes(t_hnode *heap)
 {
