@@ -6,7 +6,7 @@
 /*   By: kraghib <kraghib@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/06 21:25:37 by kraghib           #+#    #+#             */
-/*   Updated: 2026/03/13 22:01:43 by kraghib          ###   ########.fr       */
+/*   Updated: 2026/03/13 22:22:19 by kraghib          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ struct					s_coder
 	int					id;
 	long				compiles_done;
 	long				last_compile_start;
-	int					burnout;
 	int					done;
 	pthread_mutex_t		lock;
 	t_data				*data;
