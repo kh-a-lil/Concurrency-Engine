@@ -6,7 +6,7 @@
 /*   By: kraghib <kraghib@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/06 21:24:26 by kraghib           #+#    #+#             */
-/*   Updated: 2026/03/13 03:01:26 by kraghib          ###   ########.fr       */
+/*   Updated: 2026/03/13 04:20:47 by kraghib          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	fill_data(char **av, t_data *data)
 		data->is_edf = 1;
 	data->start_time = 0;
 	data->sim_stop = 0;
-	if (data->nb_coders < 1 || data->nb_coders > 250)
+	if (data->nb_coders < 1)
 		return (error("invalid number_of_coders"));
 	if (data->t_burnout < 60 || data->t_compile < 60 || data->t_debug < 60
 		|| data->t_refactor < 60)
@@ -71,18 +71,27 @@ void	clean(t_data *data)
 {
 	int	i;
 
-	i = 0;
-	while (i < data->nb_coders)
+	if (!data)
+		return ;
+	i = -1;
+	if (data->dongles)
 	{
-		pthread_mutex_destroy(&data->dongles[i].lock);
-		pthread_cond_destroy(&data->dongles[i].cond);
-		pthread_mutex_destroy(&data->coders[i].lock);
-		i++;
+		while (++i < data->nb_coders)
+		{
+			pthread_mutex_destroy(&data->dongles[i].lock);
+			pthread_cond_destroy(&data->dongles[i].cond);
+		}
+		free(data->dongles);
+	}
+	i = -1;
+	if (data->coders)
+	{
+		while (++i < data->nb_coders)
+			pthread_mutex_destroy(&data->coders[i].lock);
+		free(data->coders);
 	}
 	pthread_mutex_destroy(&data->print_lock);
 	pthread_mutex_destroy(&data->state_lock);
-	free(data->coders);
-	free(data->dongles);
 }
 
 int	main(int ac, char **av)

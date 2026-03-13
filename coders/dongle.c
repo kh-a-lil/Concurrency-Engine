@@ -6,7 +6,7 @@
 /*   By: kraghib <kraghib@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 22:38:08 by kraghib           #+#    #+#             */
-/*   Updated: 2026/03/12 23:39:50 by kraghib          ###   ########.fr       */
+/*   Updated: 2026/03/13 05:24:46 by kraghib          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,12 @@ void	req_dongle(t_coder *coder, t_dongle *dongle)
 	while (dongle->is_used || get_time_ms() < dongle->available_at
 		|| dongle->queue.heap[0].id != coder->id)
 	{
-		if (dongle->is_used || dongle->queue.heap[0].id != coder->id)
-			pthread_cond_wait(&dongle->cond, &dongle->lock);
-		else
+		get_timespec(get_time_ms() + 1, &ts);
+		pthread_cond_timedwait(&dongle->cond, &dongle->lock, &ts);
+		if (check_end(coder->data))
 		{
-			get_timespec(dongle->available_at, &ts);
-			pthread_cond_timedwait(&dongle->cond, &dongle->lock, &ts);
+			pthread_mutex_unlock(&dongle->lock);
+			return ;
 		}
 	}
 	heap_pop(&dongle->queue);
@@ -47,7 +47,7 @@ void	rel_dongle(t_dongle *dongle, long cooldown)
 {
 	pthread_mutex_lock(&dongle->lock);
 	dongle->is_used = 0;
-	dongle->available_at = get_time_ms() - cooldown;
+	dongle->available_at = get_time_ms() + cooldown;
 	pthread_cond_broadcast(&dongle->cond);
 	pthread_mutex_unlock(&dongle->lock);
 }
