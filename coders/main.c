@@ -6,7 +6,7 @@
 /*   By: kraghib <kraghib@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/06 21:24:26 by kraghib           #+#    #+#             */
-/*   Updated: 2026/03/13 21:41:35 by kraghib          ###   ########.fr       */
+/*   Updated: 2026/03/13 22:58:45 by kraghib          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,6 @@ int	fill_data(char **av, t_data *data)
 	data->sim_stop = 0;
 	if (data->nb_coders < 1)
 		return (error("invalid number_of_coders"));
-	if (data->t_burnout < 60 || data->t_compile < 60 || data->t_debug < 60
-		|| data->t_refactor < 60)
-		return (error("time values must be > 60"));
 	return (0);
 }
 

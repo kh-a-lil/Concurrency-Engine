@@ -6,7 +6,7 @@
 /*   By: kraghib <kraghib@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 21:21:36 by kraghib           #+#    #+#             */
-/*   Updated: 2026/03/13 22:07:24 by kraghib          ###   ########.fr       */
+/*   Updated: 2026/03/14 00:11:29 by kraghib          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,10 @@ void	alt_sleep(long sleep_time_ms, t_data *data)
 void	join_even_odd(t_data *data, int i)
 {
 	while (--i >= 0)
-	{
 		if (i % 2 != 0)
 			pthread_join(data->coders[i].thread, NULL);
-	}
 	i = data->nb_coders;
-	while (i >= 0)
-	{
+	while (--i >= 0)
 		if (i % 2 == 0)
 			pthread_join(data->coders[i].thread, NULL);
-	}
 }

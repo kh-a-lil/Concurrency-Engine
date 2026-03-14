@@ -6,7 +6,7 @@
 /*   By: kraghib <kraghib@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/07 21:53:03 by kraghib           #+#    #+#             */
-/*   Updated: 2026/03/13 21:51:49 by kraghib          ###   ########.fr       */
+/*   Updated: 2026/03/14 00:14:18 by kraghib          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 int	looper(t_coder *c)
 {
-	req_dongle(c, c->first_dongle);
-	req_dongle(c, c->second_dongle);
+	if (req_dongle(c, c->first_dongle) || req_dongle(c, c->second_dongle))
+		return (1);
 	pthread_mutex_lock(&c->lock);
 	c->last_compile_start = get_time_ms();
 	pthread_mutex_unlock(&c->lock);
@@ -52,7 +52,12 @@ void	*routine(void *arg)
 		return (NULL);
 	}
 	if (c->compiles_done == c->data->nb_compiles_req)
+	{
+		pthread_mutex_lock(&c->lock);
+		c->done = 1;
+		pthread_mutex_unlock(&c->lock);
 		return (NULL);
+	}
 	while (!check_end(c->data))
 		if (looper(c))
 			break ;
