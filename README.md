@@ -57,3 +57,4 @@ My implementation relies entirely on the POSIX threads API, specifically utilizi
     When a coder finishes using a dongle, they update its state (`is_used = 0`), calculate the cooldown, and call `pthread_cond_broadcast`. This acts as a signal to the OS to wake up all sleeping threads waiting for that dongle. The woken threads re-acquire the mutex and check the priority queue to see whose turn it is.
     Furthermore, if the monitor detects a death, it updates the `sim_stop` flag and immediately broadcasts to all condition variables, ensuring any threads sleeping in queues instantly wake up, realize the simulation has ended, and cleanly exit.
 
+
