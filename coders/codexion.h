@@ -6,7 +6,7 @@
 /*   By: kraghib <kraghib@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/06 21:25:37 by kraghib           #+#    #+#             */
-/*   Updated: 2026/03/13 22:48:39 by kraghib          ###   ########.fr       */
+/*   Updated: 2026/03/14 23:00:15 by kraghib          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ long					get_priority(t_coder *c);
 int						check_end(t_data *data);
 void					alt_print(char *msg, t_coder *c);
 void					alt_sleep(long sleep_time_ms, t_data *data);
-int					req_dongle(t_coder *coder, t_dongle *dongle);
+int						req_dongle(t_coder *coder, t_dongle *dongle);
 void					rel_dongle(t_dongle *dongle, long cooldown);
 void					heap_push(t_heap *queue, int id, long prio);
 void					heap_pop(t_heap *queue);

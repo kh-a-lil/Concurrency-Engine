@@ -6,7 +6,7 @@
 /*   By: kraghib <kraghib@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/06 21:24:26 by kraghib           #+#    #+#             */
-/*   Updated: 2026/03/13 22:58:45 by kraghib          ###   ########.fr       */
+/*   Updated: 2026/03/14 23:00:26 by kraghib          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,11 @@ int	main(int ac, char **av)
 	t_data	data;
 	int		i;
 
+	if (ac != 9)
+	{
+		fprintf(stderr, "wrong usage, read raedme.md\n");
+		return (1);
+	}
 	if (parse(ac, av))
 		return (1);
 	if (fill_data(av + 1, &data))
