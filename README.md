@@ -64,8 +64,8 @@ stateDiagram-v2
     Even --> Left_Dongle : 1. Locks First
     Even --> Right_Dongle : 2. Locks Second
     
-    Odd --> Right_Dongle : 2. Locks Second
-    Odd --> Left_Dongle : 1. Locks First
+    Odd --> Right_Dongle : 1. Locks First
+    Odd --> Left_Dongle : 2. Locks Second
 ```
 
 ### 3. The Condition Variable Waiting Room
