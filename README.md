@@ -95,8 +95,8 @@ sequenceDiagram
 ### Compilation
 Build the highly-optimized binary using the provided `Makefile`:
 ```bash
-git clone https://github.com/yourusername/codexion.git
-cd codexion
+git clone git@github.com:kh-a-lil/Concurrency-Engine.git
+cd codexion/coders
 make
 ```
 
