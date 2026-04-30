@@ -24,9 +24,12 @@ int	monitor_loop(t_data *data, int i, int *all_finished)
 		data->sim_stop = 1;
 		pthread_mutex_unlock(&data->state_lock);
 		j = -1;
-		while (++j < data->nb_coders)
-			pthread_cond_broadcast(&data->dongles[j].cond);
 		pthread_mutex_unlock(&data->coders[i].lock);
+		while (++j < data->nb_coders){
+			pthread_mutex_lock(&data->dongles[j].lock);
+			pthread_cond_broadcast(&data->dongles[j].cond);
+			pthread_mutex_unlock(&data->dongles[j].lock);
+		}
 		pthread_mutex_lock(&data->print_lock);
 		printf("%ld %d %s\n", get_time_ms() - data->start_time,
 			data->coders[i].id, "burned out");
