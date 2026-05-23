@@ -1,6 +1,6 @@
 <div align="center">
 
-# ⚡ Codexion: The Quantum Concurrency Engine
+# Codexion: The Quantum Concurrency Engine
 **A High-Performance POSIX Threads & Scheduling Simulation**
 
 [![C99](https://img.shields.io/badge/C-00599C?style=for-the-badge&logo=c&logoColor=white)]()
